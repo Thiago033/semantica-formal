@@ -228,21 +228,8 @@ isFinalC _       = False
 interpretadorC :: (C,Memoria) -> (C, Memoria)
 interpretadorC (c,s) = if (isFinalC c) then (c,s) else interpretadorC (smallStepC (c,s))
 
-
---------------------------------------
----
---- Exemplos de programas para teste
----
---- O ALUNO DEVE IMPLEMENTAR EXEMPLOS DE PROGRAMAS QUE USEM:
---  * RepeatUntil C B --- Repeat C until B: executa C até que B seja verdadeiro
- -- * ExecN C E      ---- ExecN C n: executa o comando C n vezes
- -- * Assert B C --- Assert B C: caso B seja verdadeiro, executa o comando C
- -- * Swap E E --- recebe duas variáveis e troca o conteúdo delas
- -- *  DAtrrib E E E E
-
 exSigma2 :: Memoria
 exSigma2 = [("x",3), ("y",0), ("z",0)]
-
 
 ---
 --- O progExp1 é um programa que usa apenas a semântica das expressões aritméticas. Esse
@@ -287,13 +274,11 @@ testeExecN = (ExecN (Atrib (Var "x") (Soma (Var "x") (Num 1))) (Num 5))
 ---
 --- Exemplos de expressões booleanas:
 
-
 teste1 :: B
 teste1 = (Leq (Soma (Num 3) (Num 3))  (Mult (Num 2) (Num 3)))
 
 teste2 :: B
 teste2 = (Leq (Soma (Var "x") (Num 3))  (Mult (Num 2) (Num 3)))
-
 
 ---
 -- Exemplos de Programas Imperativos:
@@ -307,3 +292,49 @@ fatorial = (Seq (Atrib (Var "y") (Num 1))
                 (While (Not (Igual (Var "x") (Num 1)))
                        (Seq (Atrib (Var "y") (Mult (Var "y") (Var "x")))
                             (Atrib (Var "x") (Sub (Var "x") (Num 1))))))
+
+
+
+--------------------------------------
+---
+--- Exemplos de programas para teste
+---
+--- O ALUNO DEVE IMPLEMENTAR EXEMPLOS DE PROGRAMAS QUE USEM:
+--  * RepeatUntil C B --- Repeat C until B: executa C até que B seja verdadeiro
+ -- * ExecN C E      ---- ExecN C n: executa o comando C n vezes
+ -- * Assert B C --- Assert B C: caso B seja verdadeiro, executa o comando C
+ -- * Swap E E --- recebe duas variáveis e troca o conteúdo delas
+ -- *  DAtrrib E E E E
+--------------------------------------
+
+-- RepeatUntil: incrementa x até que seja igual a 5
+testeRepeatUntil :: C
+testeRepeatUntil = RepeatUntil (Atrib (Var "x") (Soma (Var "x") (Num 1))) (Igual (Var "x") (Num 5))
+
+-- ExecN: incrementa x 3 vezes
+testeExecN2 :: C
+testeExecN2 = ExecN (Atrib (Var "x") (Soma (Var "x") (Num 1))) (Num 3)
+
+-- Assert: se x for menor ou igual a 5 duplica o valor de y
+testeAssert :: C
+testeAssert = Assert (Leq (Var "x") (Num 5)) (Atrib (Var "y") (Mult (Var "y") (Num 2)))
+
+-- Swap: troca os valores de x e y
+testeSwap :: C
+testeSwap = Swap (Var "x") (Var "y")
+
+-- DAtrrib: atribui 10 a x e 20 a y
+testeDAtrib :: C
+testeDAtrib = DAtrrib (Var "x") (Var "y") (Num 10) (Num 20)
+
+exSigmaTeste :: Memoria
+exSigmaTeste = [("x", 2), ("y", 3)]
+
+exSigmaTeste :: Memoria
+exSigmaTeste = [("x", 6), ("y", 3)]
+
+-- interpretadorC (testeRepeatUntil, exSigmaTeste)
+-- interpretadorC (testeExecN2, exSigmaTeste)
+-- interpretadorC (testeAssert, exSigmaTeste)
+-- interpretadorC (testeSwap, exSigmaTeste)
+-- interpretadorC (testeDAtrib, exSigmaTeste)
