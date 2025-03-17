@@ -330,11 +330,34 @@ testeDAtrib = DAtrrib (Var "x") (Var "y") (Num 10) (Num 20)
 exSigmaTeste :: Memoria
 exSigmaTeste = [("x", 2), ("y", 3)]
 
-exSigmaTeste :: Memoria
-exSigmaTeste = [("x", 6), ("y", 3)]
-
 -- interpretadorC (testeRepeatUntil, exSigmaTeste)
 -- interpretadorC (testeExecN2, exSigmaTeste)
 -- interpretadorC (testeAssert, exSigmaTeste)
 -- interpretadorC (testeSwap, exSigmaTeste)
 -- interpretadorC (testeDAtrib, exSigmaTeste)
+
+-- calcula o MDC entre x e y usando subtrações sucessivas. Ele continua reduzindo x e y até que sejam iguais. O resultado final é armazenado em x.
+testeMDC :: C
+testeMDC = While (Not (Igual (Var "x") (Var "y")))
+    (If (Leq (Var "x") (Var "y"))
+        (Atrib (Var "y") (Sub (Var "y") (Var "x")))
+        (Atrib (Var "x") (Sub (Var "x") (Var "y")))
+    )
+
+exSigmaMDC :: Memoria
+exSigmaMDC = [("x", 48), ("y", 18)]
+-- interpretadorC (testeMDC, exSigmaMDC)
+
+
+-- organizando as variáveis por meio de trocas (Swap).
+testeOrdena3 :: C
+testeOrdena3 = Seq 
+    (If (Leq (Var "y") (Var "x")) (Swap (Var "x") (Var "y")) Skip)
+    (Seq
+        (If (Leq (Var "z") (Var "y")) (Swap (Var "y") (Var "z")) Skip)
+        (If (Leq (Var "y") (Var "x")) (Swap (Var "x") (Var "y")) Skip)
+    )
+    
+exSigmaOrdena3 :: Memoria
+exSigmaOrdena3 = [("x", 5), ("y", 2), ("z", 8)]
+-- interpretadorC (testeOrdena3, exSigmaOrdena3)  
